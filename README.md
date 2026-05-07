@@ -5,17 +5,18 @@ How to run the web app
 ### 1. Open Terminal as Administrator
 Make sure you have permission to run npm scripts.
 
-### 2. Navigate to the project folder
+### 2. Powershell/Terminal
 ```powershell
+# 2.1) Navigate to the project folder
 cd "D:\Belgium Campus\WPR381\WPR381-Advanced-Events-Pty-Ltd"
 
-# 3. Install Depedencies
+# 2.2) Install Depedencies
 npm install
 
-# 4. Start the application
+# 2.3) Start the application
 npm start 
 ```
 
-### 5. Open in browser
+### 3. Open in browser
 Go to:
 http://localhost:3000/
