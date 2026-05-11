@@ -13,34 +13,33 @@
     <section class="auth-section">
         <div class="auth-card">
             <h1>Create Account</h1>
+            <p class="auth-subtitle">Join EventHub and start booking amazing events</p>
 
-            <form action="/register" method="POST">
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Full Name"
-                    required
-                >
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div class="alert alert-error"><%= error %></div>
+            <% } %>
 
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email Address"
-                    required
-                >
+            <form action="/register" method="POST" class="auth-form">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" placeholder="John Doe" required>
+                </div>
 
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    required
-                >
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" placeholder="you@example.com" required>
+                </div>
 
-                <button type="submit">Register</button>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="Minimum 6 characters" required minlength="6">
+                </div>
+
+                <button type="submit" class="auth-btn">Create Account</button>
             </form>
 
-            <p>
-                Already have an account?
+            <p class="auth-footer">
+                Already have an account? 
                 <a href="/login">Login here</a>
             </p>
         </div>

@@ -1,13 +1,88 @@
-    <nav class="navbar">
-        <h2>EventHub</h2>
+<nav class="navbar">
+    <a href="/" class="navbar-brand">
+        <div class="navbar-logo">&#128197;</div>
+        <span>EventHub</span>
+    </a>
 
-<ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/#events">Events</a></li>
-    <li><a href="/dashboard">Dashboard</a></li>
-    <li><a href="/admin/events">Admin</a></li>
-    <li><a href="/contact">Contact</a></li>
-    <li><a href="/login">Login</a></li>
-    <li><a href="/register">Register</a></li>
-</ul>
-    </nav>
+    <ul class="navbar-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/#events">Events</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li><a href="/admin/events">Admin</a></li>
+        <li><a href="/contact">Contact</a></li>
+    </ul>
+
+    <div class="navbar-auth">
+        <a href="/login" class="btn-outline-nav">Login</a>
+        <a href="/register" class="btn-solid-nav">Register</a>
+    </div>
+</nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const currentPath = window.location.pathname;
+
+    document.querySelectorAll('.navbar-links a, .navbar-auth a').forEach(link => {
+
+        const linkHref = link.getAttribute('href');
+
+        link.classList.remove('active');
+
+        // Home
+        if (currentPath === '/' && linkHref === '/') {
+            link.classList.add('active');
+        }
+
+        // Event pages
+        else if (
+            currentPath.startsWith('/events') &&
+            linkHref === '/#events'
+        ) {
+            link.classList.add('active');
+        }
+
+        // Dashboard
+        else if (
+            currentPath.startsWith('/dashboard') &&
+            linkHref === '/dashboard'
+        ) {
+            link.classList.add('active');
+        }
+
+        // Admin
+        else if (
+            currentPath.startsWith('/admin') &&
+            linkHref === '/admin/events'
+        ) {
+            link.classList.add('active');
+        }
+
+        // Contact
+        else if (
+            currentPath === '/contact' &&
+            linkHref === '/contact'
+        ) {
+            link.classList.add('active');
+        }
+
+        // Login
+        else if (
+            currentPath === '/login' &&
+            linkHref === '/login'
+        ) {
+            link.classList.add('active');
+        }
+
+        // Register
+        else if (
+            currentPath === '/register' &&
+            linkHref === '/register'
+        ) {
+            link.classList.add('active');
+        }
+
+    });
+
+});
+</script>
