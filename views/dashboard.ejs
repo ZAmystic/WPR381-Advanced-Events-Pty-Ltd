@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - EventHub</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <%- include('partials/navbar') %>
+
+  <section class="dashboard">
+    <div class="dashboard-header">
+      <h1>Welcome Back, User!</h1>
+      <p>Here are your upcoming bookings.</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>3</h3>
+        <p>Total Bookings</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>2</h3>
+        <p>Upcoming Events</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>1</h3>
+        <p>Past Events</p>
+      </div>
+    </div>
+
+    <div class="bookings-section">
+      <h2>My Bookings</h2>
+
+      <div class="booking-card">
+        <h3>Tech Conference 2026</h3>
+        <p>Date: 20 July 2026</p>
+        <p>Status: Confirmed</p>
+      </div>
+
+      <div class="booking-card">
+        <h3>Music Festival</h3>
+        <p>Date: 12 June 2026</p>
+        <p>Status: Confirmed</p>
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+
+</body>
+</html>

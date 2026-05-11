@@ -23,6 +23,10 @@ app.get("/contact", (req, res) => {
     res.render("contact");
 });
 
+app.get("/dashboard", (req, res) => {
+    res.render("dashboard");
+});
+
 const PORT = 3000;
 
 app.listen(PORT, () => {
