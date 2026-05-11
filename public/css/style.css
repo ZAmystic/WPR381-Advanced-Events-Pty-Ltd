@@ -22,8 +22,13 @@ body{
     display:flex;
     justify-content:space-between;
     align-items:center;
+    position: sticky;
+    position-anchor: inherit;
+    top: 0;
 
-    padding:20px 50px;
+    background-image: linear-gradient(#1e2b46,#101825);
+
+    padding:15px 50px;
 }
 
 .navbar ul{
@@ -35,6 +40,12 @@ body{
 .navbar a{
     color:white;
     text-decoration:none;
+}
+
+#logo{
+    width: 150px;
+    padding: 0;
+    cursor: pointer;
 }
 
 /* HERO */
