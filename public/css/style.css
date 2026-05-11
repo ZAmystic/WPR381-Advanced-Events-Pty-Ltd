@@ -260,6 +260,39 @@ footer{
     background: #111827;
     color: white;
 }
+/* EVENT DETAILS PAGE */
+
+.event-details {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.event-details-image img {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.event-details-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.event-details-content h1 {
+    margin-bottom: 20px;
+}
+
+.event-meta {
+    margin-bottom: 10px;
+}
+
+.event-description {
+    margin: 25px 0;
+    line-height: 1.7;
+}
 
 /* RESPONSIVE DESIGN */
 

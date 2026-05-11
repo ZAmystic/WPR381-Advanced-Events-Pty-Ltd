@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Details - EventHub</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <%- include('partials/navbar') %>
+
+  <section class="event-details">
+    <div class="event-details-image">
+      <img src="https://picsum.photos/800/400?random=10" alt="Event Image">
+    </div>
+
+    <div class="event-details-content">
+      <h1>Tech Conference 2026</h1>
+
+      <p class="event-meta"><strong>Date:</strong> 20 July 2026</p>
+      <p class="event-meta"><strong>Venue:</strong> Cape Town Convention Centre</p>
+      <p class="event-meta"><strong>Price:</strong> R450</p>
+      <p class="event-meta"><strong>Available Tickets:</strong> 120</p>
+
+      <p class="event-description">
+        Join industry leaders and innovators for a full day of talks,
+        workshops, and networking opportunities.
+      </p>
+
+      <button class="primary-btn">Book Now</button>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+
+</body>
+</html>

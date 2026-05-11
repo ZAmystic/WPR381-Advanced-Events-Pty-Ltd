@@ -31,6 +31,10 @@ app.get("/admin/events", (req, res) => {
     res.render("admin-events");
 });
 
+app.get("/events/:id", (req, res) => {
+    res.render("event-details");
+});
+
 const PORT = 3000;
 
 app.listen(PORT, () => {
