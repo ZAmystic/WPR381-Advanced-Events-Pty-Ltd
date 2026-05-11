@@ -39,6 +39,10 @@ app.get("/admin/events/create", (req, res) => {
     res.render("event-form");
 });
 
+app.use((req, res) => {
+    res.status(404).render("404");
+});
+
 const PORT = 3000;
 
 app.listen(PORT, () => {
