@@ -293,6 +293,71 @@ footer{
     margin: 25px 0;
     line-height: 1.7;
 }
+/* SEARCH SECTION */
+
+.search-section {
+    background: white;
+    padding: 30px 20px;
+    margin: -30px auto 30px;
+    max-width: 1100px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    position: relative;
+    z-index: 2;
+}
+
+.search-form {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 15px;
+}
+
+.search-form input,
+.search-form select,
+.search-form button {
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.search-form button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+/* HOVER EFFECTS */
+
+.navbar a:hover {
+    color: #60a5fa;
+}
+
+.hero button:hover,
+.primary-btn:hover,
+.event-card button:hover,
+.auth-card button:hover,
+.search-form button:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+.event-card,
+.stat-card,
+.booking-card,
+.auth-card,
+.event-details-content {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-card:hover,
+.stat-card:hover,
+.booking-card:hover,
+.auth-card:hover,
+.event-details-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
 
 /* RESPONSIVE DESIGN */
 
@@ -338,4 +403,8 @@ footer{
     .card-actions button {
         width: 100%;
     }
+
+    .search-form {
+    grid-template-columns: 1fr;
+}
 }
