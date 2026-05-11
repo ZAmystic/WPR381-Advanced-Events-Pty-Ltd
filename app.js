@@ -6,6 +6,7 @@ const app = express();
 app.set("view engine", "ejs");
 
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 app.get("/", (req, res) => {
     res.render("index");
