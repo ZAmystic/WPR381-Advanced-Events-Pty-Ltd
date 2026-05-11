@@ -1,0 +1,265 @@
+
+<style>
+#erd-wrap { padding: 1rem 0; }
+#erd-wrap svg { width: 100%; }
+.tab-bar { display:flex; gap:8px; margin-bottom:1.5rem; flex-wrap:wrap; }
+.tab-btn { padding:6px 16px; border-radius:var(--border-radius-md); border:0.5px solid var(--color-border-secondary); background:var(--color-background-primary); color:var(--color-text-secondary); font-size:13px; cursor:pointer; transition:all .15s; }
+.tab-btn.active { background:var(--color-background-secondary); color:var(--color-text-primary); border-color:var(--color-border-primary); font-weight:500; }
+.panel { display:none; } .panel.active { display:block; }
+.table-card { background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-lg); overflow:hidden; margin-bottom:1.25rem; }
+.table-header { padding:10px 16px; font-weight:500; font-size:14px; border-bottom:0.5px solid var(--color-border-tertiary); display:flex; align-items:center; gap:8px; }
+.table-header i { font-size:16px; }
+table.fields { width:100%; border-collapse:collapse; font-size:13px; }
+table.fields th { padding:7px 16px; text-align:left; font-weight:500; color:var(--color-text-secondary); font-size:12px; border-bottom:0.5px solid var(--color-border-tertiary); background:var(--color-background-secondary); }
+table.fields td { padding:8px 16px; border-bottom:0.5px solid var(--color-border-tertiary); vertical-align:middle; }
+table.fields tr:last-child td { border-bottom:none; }
+.badge { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:500; margin-right:4px; }
+.pk  { background:var(--color-background-warning); color:var(--color-text-warning); }
+.fk  { background:var(--color-background-info);    color:var(--color-text-info); }
+.uq  { background:var(--color-background-success);  color:var(--color-text-success); }
+.nn  { background:var(--color-background-secondary); color:var(--color-text-secondary); }
+.type-pill { font-family:var(--font-mono); font-size:11px; color:var(--color-text-secondary); }
+.example-box { background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:12px 16px; font-size:12px; font-family:var(--font-mono); white-space:pre; overflow:auto; border:0.5px solid var(--color-border-tertiary); margin-bottom:1.25rem; }
+.legend { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:1.25rem; }
+.legend-item { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--color-text-secondary); }
+</style>
+
+<div id="erd-wrap">
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="show('erd')">ERD diagram</button>
+    <button class="tab-btn" onclick="show('tables')">Table details</button>
+    <button class="tab-btn" onclick="show('examples')">Example payloads</button>
+  </div>
+
+  <!-- ERD PANEL -->
+  <div id="panel-erd" class="panel active">
+    <div class="legend">
+      <div class="legend-item"><span class="badge pk">PK</span> Primary key</div>
+      <div class="legend-item"><span class="badge fk">FK</span> Foreign key</div>
+      <div class="legend-item"><span class="badge uq">UQ</span> Unique</div>
+      <div class="legend-item"><span class="badge nn">NN</span> Not null</div>
+    </div>
+    <div id="erd"></div>
+  </div>
+
+  <!-- TABLE DETAILS PANEL -->
+  <div id="panel-tables" class="panel">
+
+    <!-- USERS -->
+    <div class="table-card">
+      <div class="table-header" style="background:var(--color-background-info);color:var(--color-text-info);">
+        <i class="ti ti-users" aria-hidden="true"></i> users
+      </div>
+      <table class="fields">
+        <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Notes</th></tr>
+        <tr><td>id</td><td class="type-pill">INT</td><td><span class="badge pk">PK</span><span class="badge nn">NN</span></td><td>Auto-increment</td></tr>
+        <tr><td>name</td><td class="type-pill">VARCHAR(100)</td><td><span class="badge nn">NN</span></td><td>Full name</td></tr>
+        <tr><td>email</td><td class="type-pill">VARCHAR(150)</td><td><span class="badge uq">UQ</span><span class="badge nn">NN</span></td><td>Login identifier</td></tr>
+        <tr><td>password</td><td class="type-pill">VARCHAR(255)</td><td><span class="badge nn">NN</span></td><td>bcrypt hash — never store plain text</td></tr>
+        <tr><td>role</td><td class="type-pill">ENUM</td><td><span class="badge nn">NN</span></td><td>'user' or 'admin'. Default: 'user'</td></tr>
+        <tr><td>created_at</td><td class="type-pill">TIMESTAMP</td><td><span class="badge nn">NN</span></td><td>Auto-set on insert</td></tr>
+      </table>
+    </div>
+
+    <!-- EVENTS -->
+    <div class="table-card">
+      <div class="table-header" style="background:var(--color-background-warning);color:var(--color-text-warning);">
+        <i class="ti ti-calendar-event" aria-hidden="true"></i> events
+      </div>
+      <table class="fields">
+        <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Notes</th></tr>
+        <tr><td>id</td><td class="type-pill">INT</td><td><span class="badge pk">PK</span><span class="badge nn">NN</span></td><td>Auto-increment</td></tr>
+        <tr><td>title</td><td class="type-pill">VARCHAR(200)</td><td><span class="badge nn">NN</span></td><td>Event display name</td></tr>
+        <tr><td>description</td><td class="type-pill">TEXT</td><td><span class="badge nn">NN</span></td><td>Full event description</td></tr>
+        <tr><td>date</td><td class="type-pill">DATE</td><td><span class="badge nn">NN</span></td><td>Format: YYYY-MM-DD</td></tr>
+        <tr><td>venue</td><td class="type-pill">VARCHAR(200)</td><td><span class="badge nn">NN</span></td><td>Location / venue name</td></tr>
+        <tr><td>price</td><td class="type-pill">DECIMAL(10,2)</td><td><span class="badge nn">NN</span></td><td>In ZAR. Default 0.00</td></tr>
+        <tr><td>capacity</td><td class="type-pill">INT</td><td><span class="badge nn">NN</span></td><td>Max attendees</td></tr>
+        <tr><td>tickets_sold</td><td class="type-pill">INT</td><td><span class="badge nn">NN</span></td><td>Auto-managed. Default 0</td></tr>
+        <tr><td>category</td><td class="type-pill">VARCHAR(100)</td><td><span class="badge nn">NN</span></td><td>e.g. Conference, Festival, Workshop</td></tr>
+        <tr><td>image_url</td><td class="type-pill">VARCHAR(500)</td><td>—</td><td>Optional banner image</td></tr>
+        <tr><td>created_by</td><td class="type-pill">INT</td><td><span class="badge fk">FK → users.id</span></td><td>Admin who created it</td></tr>
+        <tr><td>created_at</td><td class="type-pill">TIMESTAMP</td><td><span class="badge nn">NN</span></td><td>Auto-set on insert</td></tr>
+        <tr><td>updated_at</td><td class="type-pill">TIMESTAMP</td><td><span class="badge nn">NN</span></td><td>Auto-updated on change</td></tr>
+      </table>
+    </div>
+
+    <!-- BOOKINGS -->
+    <div class="table-card">
+      <div class="table-header" style="background:var(--color-background-success);color:var(--color-text-success);">
+        <i class="ti ti-ticket" aria-hidden="true"></i> bookings
+      </div>
+      <table class="fields">
+        <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Notes</th></tr>
+        <tr><td>id</td><td class="type-pill">INT</td><td><span class="badge pk">PK</span><span class="badge nn">NN</span></td><td>Auto-increment</td></tr>
+        <tr><td>user_id</td><td class="type-pill">INT</td><td><span class="badge fk">FK → users.id</span><span class="badge nn">NN</span></td><td>Who booked</td></tr>
+        <tr><td>event_id</td><td class="type-pill">INT</td><td><span class="badge fk">FK → events.id</span><span class="badge nn">NN</span></td><td>Which event</td></tr>
+        <tr><td>status</td><td class="type-pill">ENUM</td><td><span class="badge nn">NN</span></td><td>'confirmed', 'cancelled', 'pending'</td></tr>
+        <tr><td>booked_at</td><td class="type-pill">TIMESTAMP</td><td><span class="badge nn">NN</span></td><td>Auto-set on insert</td></tr>
+        <tr><td colspan="4" style="padding:8px 16px;font-size:12px;color:var(--color-text-secondary)">⚠ UNIQUE constraint on (user_id, event_id) — one booking per user per event</td></tr>
+      </table>
+    </div>
+
+    <!-- CONTACT MESSAGES -->
+    <div class="table-card">
+      <div class="table-header" style="background:var(--color-background-danger);color:var(--color-text-danger);">
+        <i class="ti ti-mail" aria-hidden="true"></i> contact_messages
+      </div>
+      <table class="fields">
+        <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Notes</th></tr>
+        <tr><td>id</td><td class="type-pill">INT</td><td><span class="badge pk">PK</span><span class="badge nn">NN</span></td><td>Auto-increment</td></tr>
+        <tr><td>name</td><td class="type-pill">VARCHAR(100)</td><td><span class="badge nn">NN</span></td><td>Sender name</td></tr>
+        <tr><td>email</td><td class="type-pill">VARCHAR(150)</td><td><span class="badge nn">NN</span></td><td>Sender email (not linked to users)</td></tr>
+        <tr><td>message</td><td class="type-pill">TEXT</td><td><span class="badge nn">NN</span></td><td>Message body</td></tr>
+        <tr><td>sent_at</td><td class="type-pill">TIMESTAMP</td><td><span class="badge nn">NN</span></td><td>Auto-set on insert</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- EXAMPLE PAYLOADS PANEL -->
+  <div id="panel-examples" class="panel">
+    <p style="font-size:13px;color:var(--color-text-secondary);margin:0 0 1rem">These are the exact values your code should INSERT into each table.</p>
+
+    <div class="table-header" style="padding:8px 0;font-size:13px;color:var(--color-text-secondary);">Register a new user (POST /register)</div>
+    <div class="example-box">INSERT INTO users (name, email, password, role)
+VALUES (
+  'Sipho Dlamini',
+  'sipho@example.com',
+  '$2b$10$...bcrypt_hash...',  -- use bcrypt.hash(plaintext, 10)
+  'user'                       -- default, can omit
+);</div>
+
+    <div class="table-header" style="padding:8px 0;font-size:13px;color:var(--color-text-secondary);">Create an event (POST /admin/events/create)</div>
+    <div class="example-box">INSERT INTO events
+  (title, description, date, venue, price, capacity, category, created_by)
+VALUES (
+  'Durban Jazz Night',
+  'An evening of smooth jazz with local artists.',
+  '2026-09-15',                -- YYYY-MM-DD
+  'Moses Mabhida Stadium',
+  350.00,                      -- ZAR
+  800,
+  'Festival',
+  1                            -- admin user id
+);</div>
+
+    <div class="table-header" style="padding:8px 0;font-size:13px;color:var(--color-text-secondary);">Book an event (POST /events/:id/book)</div>
+    <div class="example-box">-- Step 1: check capacity
+SELECT capacity, tickets_sold FROM events WHERE id = 3;
+
+-- Step 2: insert booking (IGNORE prevents duplicates)
+INSERT IGNORE INTO bookings (user_id, event_id, status)
+VALUES (5, 3, 'confirmed');
+
+-- Step 3: increment counter
+UPDATE events
+SET tickets_sold = tickets_sold + 1
+WHERE id = 3 AND tickets_sold < capacity;</div>
+
+    <div class="table-header" style="padding:8px 0;font-size:13px;color:var(--color-text-secondary);">Contact form submission (POST /contact)</div>
+    <div class="example-box">INSERT INTO contact_messages (name, email, message)
+VALUES (
+  'Lerato Mokoena',
+  'lerato@example.com',
+  'Hi, I would like to know about group bookings.'
+);</div>
+
+    <div class="table-header" style="padding:8px 0;font-size:13px;color:var(--color-text-secondary);">Dashboard query — user's bookings</div>
+    <div class="example-box">SELECT b.id, b.status, b.booked_at,
+       e.title, e.date, e.venue, e.price
+FROM bookings b
+JOIN events e ON e.id = b.event_id
+WHERE b.user_id = ?          -- session user id
+ORDER BY e.date ASC;</div>
+  </div>
+</div>
+
+<script type="module">
+import mermaid from 'https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs';
+const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+await document.fonts.ready;
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'base',
+  fontFamily: '"Anthropic Sans", sans-serif',
+  themeVariables: {
+    darkMode: dark,
+    fontSize: '13px',
+    fontFamily: '"Anthropic Sans", sans-serif',
+    lineColor: dark ? '#9c9a92' : '#73726c',
+    textColor: dark ? '#c2c0b6' : '#3d3d3a',
+  },
+});
+const diagram = `erDiagram
+  users {
+    int id PK
+    string name
+    string email
+    string password
+    enum role
+    timestamp created_at
+  }
+  events {
+    int id PK
+    string title
+    text description
+    date date
+    string venue
+    decimal price
+    int capacity
+    int tickets_sold
+    string category
+    string image_url
+    int created_by FK
+    timestamp created_at
+    timestamp updated_at
+  }
+  bookings {
+    int id PK
+    int user_id FK
+    int event_id FK
+    enum status
+    timestamp booked_at
+  }
+  contact_messages {
+    int id PK
+    string name
+    string email
+    text message
+    timestamp sent_at
+  }
+  users ||--o{ events : "creates"
+  users ||--o{ bookings : "makes"
+  events ||--o{ bookings : "has"
+`;
+const { svg } = await mermaid.render('erd-svg', diagram);
+document.getElementById('erd').innerHTML = svg;
+
+document.querySelectorAll('#erd svg .node').forEach(node => {
+  const firstPath = node.querySelector('path[d]');
+  if (!firstPath) return;
+  const d = firstPath.getAttribute('d');
+  const nums = d.match(/-?[\d.]+/g)?.map(Number);
+  if (!nums || nums.length < 8) return;
+  const xs = [nums[0],nums[2],nums[4],nums[6]], ys = [nums[1],nums[3],nums[5],nums[7]];
+  const x = Math.min(...xs), y = Math.min(...ys), w = Math.max(...xs)-x, h = Math.max(...ys)-y;
+  const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+  rect.setAttribute('x',x); rect.setAttribute('y',y);
+  rect.setAttribute('width',w); rect.setAttribute('height',h); rect.setAttribute('rx','8');
+  for (const a of ['fill','stroke','stroke-width','class','style']) {
+    if (firstPath.hasAttribute(a)) rect.setAttribute(a,firstPath.getAttribute(a));
+  }
+  firstPath.replaceWith(rect);
+});
+document.querySelectorAll('#erd svg .row-rect-odd path, #erd svg .row-rect-even path').forEach(p => {
+  p.setAttribute('stroke','none');
+});
+</script>
+<script>
+function show(tab) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
