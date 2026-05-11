@@ -27,6 +27,10 @@ app.get("/dashboard", (req, res) => {
     res.render("dashboard");
 });
 
+app.get("/admin/events", (req, res) => {
+    res.render("admin-events");
+});
+
 const PORT = 3000;
 
 app.listen(PORT, () => {

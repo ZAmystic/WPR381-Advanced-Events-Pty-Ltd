@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Events - EventHub</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <%- include('partials/navbar') %>
+
+  <section class="dashboard">
+    <div class="dashboard-header">
+      <h1>Manage Events</h1>
+      <p>Create, edit, and delete events.</p>
+    </div>
+
+    <div class="admin-actions">
+      <button class="primary-btn">+ Create New Event</button>
+    </div>
+
+    <div class="bookings-section">
+      <h2>All Events</h2>
+
+      <div class="booking-card">
+        <h3>Tech Conference 2026</h3>
+        <p>Date: 20 July 2026</p>
+        <p>Capacity: 500</p>
+        <div class="card-actions">
+          <button>Edit</button>
+          <button>Delete</button>
+        </div>
+      </div>
+
+      <div class="booking-card">
+        <h3>Music Festival</h3>
+        <p>Date: 12 June 2026</p>
+        <p>Capacity: 2000</p>
+        <div class="card-actions">
+          <button>Edit</button>
+          <button>Delete</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+
+</body>
+</html>
