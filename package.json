@@ -1,20 +1,23 @@
 {
   "name": "smarteventplatform",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "EventHub - Advanced Events Platform",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
     "ejs": "^5.0.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "express-session": "^1.18.1",
+    "mysql2": "^3.11.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
