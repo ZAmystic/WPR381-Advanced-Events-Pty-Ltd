@@ -178,3 +178,11 @@ footer{
 .auth-card p {
     margin-top: 20px;
 }
+
+.auth-card textarea {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    resize: vertical;
+    font-family: inherit;
+}

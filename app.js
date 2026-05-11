@@ -19,6 +19,9 @@ app.get("/register", (req, res) => {
     res.render("register");
 });
 
+app.get("/contact", (req, res) => {
+    res.render("contact");
+});
 
 const PORT = 3000;
 
