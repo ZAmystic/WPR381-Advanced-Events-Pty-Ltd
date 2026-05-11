@@ -35,6 +35,10 @@ app.get("/events/:id", (req, res) => {
     res.render("event-details");
 });
 
+app.get("/admin/events/create", (req, res) => {
+    res.render("event-form");
+});
+
 const PORT = 3000;
 
 app.listen(PORT, () => {

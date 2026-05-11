@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Event - EventHub</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <%- include('partials/navbar') %>
+
+  <section class="auth-section">
+    <div class="auth-card" style="max-width: 700px;">
+      <h1>Create New Event</h1>
+
+      <form action="/admin/events/create" method="POST">
+        <input type="text" name="title" placeholder="Event Title" required>
+
+        <textarea
+          name="description"
+          placeholder="Event Description"
+          rows="5"
+          required
+        ></textarea>
+
+        <input type="date" name="date" required>
+
+        <input type="text" name="venue" placeholder="Venue" required>
+
+        <input type="number" name="price" placeholder="Price" required>
+
+        <input type="number" name="capacity" placeholder="Capacity" required>
+
+        <input type="text" name="category" placeholder="Category" required>
+
+        <button type="submit">Save Event</button>
+      </form>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+
+</body>
+</html>
