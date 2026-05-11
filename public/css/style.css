@@ -345,6 +345,7 @@ body {
     transition: all 0.3s;
     outline: none;
     font-family: inherit;
+    margin-bottom: 10px;
 }
 
 .form-group input:focus,
