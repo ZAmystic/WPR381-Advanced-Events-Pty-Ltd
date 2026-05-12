@@ -4,7 +4,9 @@
         <li><a href="/">Home</a></li>
         <li><a href="/#events">Events</a></li>
         <li><a href="/dashboard">Dashboard</a></li>
+        <% if (currentUser && currentUser.role === 'admin') { %>
         <li><a href="/admin/events">Admin</a></li>
+        <% } %>
         <li><a href="/contact">Contact</a></li>
     </ul>
 
