@@ -4,8 +4,8 @@ const events   = require("../controllers/eventController");
 const { requireAdmin } = require("../middleware/auth");
 
 // Public
-router.get("/:id", events.getEventDetails);
 
+router.get("/:id", events.getEventDetails);
 // Admin only
 router.get("/admin/events",            requireAdmin, events.adminListEvents);
 router.get("/admin/events/create",     requireAdmin, events.showCreateForm);

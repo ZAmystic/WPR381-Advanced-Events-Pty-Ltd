@@ -10,6 +10,10 @@ exports.requireAuth = (req, res, next) => {
   next();
 };
 
+   
+
+
+
 /**
  * Middleware: protect routes that require an admin role.
  */

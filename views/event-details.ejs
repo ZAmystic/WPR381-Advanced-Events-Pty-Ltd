@@ -32,6 +32,63 @@
     </div>
   </section>
 
+  <section class="event-details">
+
+    <div class="event-details-image">
+
+        <img
+            src="<%= event.image %>"
+            alt="<%= event.title %>"
+        >
+
+    </div>
+
+    <div class="event-details-content">
+
+        <h1><%= event.title %></h1>
+
+        <p class="event-meta">
+            <strong>Date:</strong>
+            <%= new Date(event.date).toDateString() %>
+        </p>
+
+        <p class="event-meta">
+            <strong>Venue:</strong>
+            <%= event.venue %>
+        </p>
+
+        <p class="event-meta">
+            <strong>Category:</strong>
+            <%= event.category %>
+        </p>
+
+        <p class="event-meta">
+            <strong>Available Tickets:</strong>
+            <%= event.capacity - event.ticketsBooked %>
+        </p>
+
+        <p class="event-description">
+            <%= event.description %>
+        </p>
+
+        <form
+            action="/events/<%= event._id %>/book"
+            method="POST"
+        >
+
+            <button
+                type="submit"
+                class="primary-btn"
+            >
+                Book Now
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
   <%- include('partials/footer') %>
 
 </body>
