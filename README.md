@@ -1,3 +1,8 @@
+## GitHub Repository
+https://github.com/ZAmystic/WPR381-Advanced-Events-Pty-Ltd
+
+---
+
 # WPR381 — Advanced Events (EventHub)
 
 A full-stack event booking platform built with **Node.js**, **Express**, **EJS**, and **MongoDB + Mongoose**.
