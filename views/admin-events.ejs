@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Events - EventHub</title>
+  <title>Admin Events - Advanced Events (PTY) Ltd</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -25,25 +25,60 @@
     <div class="bookings-section">
       <h2>All Events</h2>
 
-      <div class="booking-card">
-        <h3>Tech Conference 2026</h3>
-        <p>Date: 20 July 2026</p>
-        <p>Capacity: 500</p>
-        <div class="card-actions">
-          <button>Edit</button>
-          <button>Delete</button>
-        </div>
-      </div>
+      <% if (events && events.length > 0) { %>
+        <% events.forEach((event) => { %>
+          <div class="booking-card">
+            <div class="booking-card-header">
+              <div>
+                <h3><%= event.title %></h3>
+                <p class="meta">
+                  <span><strong>Date:</strong> <%= new Date(event.date).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
+                  <span><strong>Category:</strong> <%= event.category %></span>
+                  <span><strong>Status:</strong> <%= event.status %></span>
+                </p>
+              </div>
+              <div class="event-actions">
+                <a href="/admin/events/<%= event._id %>/edit" class="secondary-btn">Edit</a>
+                <form action="/admin/events/<%= event._id %>/delete" method="POST" class="inline-form" onsubmit="return confirm('Delete this event? Are you sure?');">
+                  <button type="submit" class="danger-btn">Delete</button>
+                </form>
+              </div>
+            </div>
 
-      <div class="booking-card">
-        <h3>Music Festival</h3>
-        <p>Date: 12 June 2026</p>
-        <p>Capacity: 2000</p>
-        <div class="card-actions">
-          <button>Edit</button>
-          <button>Delete</button>
+            <div class="booking-card-photo">
+              <% if (event.imageUrl) { %>
+                <img src="<%= event.imageUrl %>" alt="Photo for <%= event.title %>">
+              <% } else { %>
+                <div class="photo-placeholder">No event photo available</div>
+              <% } %>
+            </div>
+
+            <div class="booking-card-body">
+              <div class="booking-card-row">
+                <p><strong>Venue:</strong> <%= event.venue?.name || 'N/A' %> <%= event.venue?.city ? `(${event.venue.city})` : '' %></p>
+                <p><strong>Capacity:</strong> <%= event.capacity %></p>
+                <p><strong>Price:</strong> R<%= event.price.toFixed(2) %></p>
+              </div>
+
+              <p class="event-description"><%= event.description.length > 150 ? event.description.slice(0, 150) + '...' : event.description %></p>
+
+              <div class="tag-list">
+                <% if (event.tags && event.tags.length) { %>
+                  <% event.tags.forEach((tag) => { %>
+                    <span class="tag-chip"><%= tag %></span>
+                  <% }); %>
+                <% } else { %>
+                  <span class="tag-chip empty">No tags</span>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <div class="booking-card empty-state">
+          <p>No events found. Create a new event to get started.</p>
         </div>
-      </div>
+      <% } %>
     </div>
   </section>
 
