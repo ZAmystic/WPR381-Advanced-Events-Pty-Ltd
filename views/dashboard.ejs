@@ -3,54 +3,398 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - Advanced Events (PTY) Ltd</title>
+  <title>Dashboard — Advanced Events (PTY) Ltd</title>
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
   <%- include('partials/navbar') %>
 
-  <section class="dashboard">
-    <div class="dashboard-header">
-      <h1>Welcome Back, <%= userName || 'User' %>!</h1>
-      <p>Here are your upcoming bookings.</p>
+  <!-- ── Flash Messages ─────────────────────────────────────────────────── -->
+  <% if (flash && flash.booking) { %>
+    <div class="flash flash--success" role="alert">
+      <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
+      <span>Booking confirmed! Your reference: <strong><%= flash.booking %></strong></span>
+      <button class="flash__close" onclick="this.parentElement.remove()">×</button>
     </div>
-
-    <div class="stats-grid">
-      <div class="stat-card">
-        <h3>3</h3>
-        <p>Total Bookings</p>
-      </div>
-
-      <div class="stat-card">
-        <h3>2</h3>
-        <p>Upcoming Events</p>
-      </div>
-
-      <div class="stat-card">
-        <h3>1</h3>
-        <p>Past Events</p>
-      </div>
+  <% } %>
+  <% if (flash && flash.cancelled) { %>
+    <div class="flash flash--info" role="alert">
+      <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd"/></svg>
+      <span>Your booking has been cancelled successfully.</span>
+      <button class="flash__close" onclick="this.parentElement.remove()">×</button>
     </div>
-
-    <div class="bookings-section">
-      <h2>My Bookings</h2>
-
-      <div class="booking-card">
-        <h3>Tech Conference 2026</h3>
-        <p>Date: 20 July 2026</p>
-        <p>Status: Confirmed</p>
-      </div>
-
-      <div class="booking-card">
-        <h3>Music Festival</h3>
-        <p>Date: 12 June 2026</p>
-        <p>Status: Confirmed</p>
-      </div>
+  <% } %>
+  <% if (flash && flash.error) { %>
+    <div class="flash flash--error" role="alert">
+      <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+      <span>
+        <% if (flash.error === 'not_found') { %>Booking not found or already cancelled.
+        <% } else if (flash.error === 'cancel_failed') { %>Could not cancel booking. Please try again.
+        <% } else if (flash.error === 'load_failed') { %>Could not load your dashboard. Please refresh.
+        <% } else { %>Something went wrong. Please try again.<% } %>
+      </span>
+      <button class="flash__close" onclick="this.parentElement.remove()">×</button>
     </div>
-  </section>
+  <% } %>
+
+  <!-- ── Dashboard Shell ────────────────────────────────────────────────── -->
+  <div class="dash-shell">
+
+    <!-- Sidebar -->
+    <aside class="dash-sidebar">
+      <div class="sidebar-avatar">
+        <div class="avatar-circle">
+          <%= userName ? userName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2) : 'U' %>
+        </div>
+        <div class="avatar-info">
+          <span class="avatar-name"><%= userName || 'User' %></span>
+          <span class="avatar-role">Member</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#overview"   class="sidebar-link active" data-tab="overview">
+          <svg viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"/></svg>
+          Overview
+        </a>
+        <a href="#upcoming"   class="sidebar-link" data-tab="upcoming">
+          <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
+          Upcoming
+          <% if (upcomingCount > 0) { %><span class="badge"><%= upcomingCount %></span><% } %>
+        </a>
+        <a href="#past"       class="sidebar-link" data-tab="past">
+          <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd"/></svg>
+          Past Events
+        </a>
+        <a href="#cancelled"  class="sidebar-link" data-tab="cancelled">
+          <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"/></svg>
+          Cancelled
+        </a>
+      </nav>
+
+      <div class="sidebar-cta">
+        <p>Looking for your next event?</p>
+        <a href="/#events" class="dash-btn dash-btn--primary">Browse Events</a>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="dash-main">
+
+      <!-- ── Overview Tab ─────────────────────────────────────────────── -->
+      <section id="overview" class="tab-panel active">
+
+        <div class="dash-topbar">
+          <div>
+            <h1 class="dash-greeting">Welcome back, <span><%= userName ? userName.split(' ')[0] : 'there' %>!</span></h1>
+            <p class="dash-subtitle">Here's a snapshot of your event activity.</p>
+          </div>
+          <a href="/#events" class="dash-btn dash-btn--primary dash-btn--icon">
+            <svg viewBox="0 0 20 20"><path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/></svg>
+            New Booking
+          </a>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="stats-row">
+          <div class="stat-tile stat-tile--blue">
+            <div class="stat-tile__icon">
+              <svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <div class="stat-tile__body">
+              <span class="stat-tile__value"><%= totalBookings %></span>
+              <span class="stat-tile__label">Total Bookings</span>
+            </div>
+          </div>
+
+          <div class="stat-tile stat-tile--green">
+            <div class="stat-tile__icon">
+              <svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zm13.5 9a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5z" clip-rule="evenodd"/></svg>
+            </div>
+            <div class="stat-tile__body">
+              <span class="stat-tile__value"><%= upcomingCount %></span>
+              <span class="stat-tile__label">Upcoming Events</span>
+            </div>
+          </div>
+
+          <div class="stat-tile stat-tile--purple">
+            <div class="stat-tile__icon">
+              <svg viewBox="0 0 24 24"><path d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z"/></svg>
+            </div>
+            <div class="stat-tile__body">
+              <span class="stat-tile__value"><%= totalTickets %></span>
+              <span class="stat-tile__label">Tickets Booked</span>
+            </div>
+          </div>
+
+          <div class="stat-tile stat-tile--amber">
+            <div class="stat-tile__icon">
+              <svg viewBox="0 0 24 24"><path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"/><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM18.75 9a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V9.75a.75.75 0 00-.75-.75h-.008zM4.5 9.75A.75.75 0 015.25 9h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V9.75z" clip-rule="evenodd"/><path d="M2.25 18a.75.75 0 000 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 00-.75-.75H2.25z"/></svg>
+            </div>
+            <div class="stat-tile__body">
+              <span class="stat-tile__value">R<%= totalSpent.toLocaleString('en-ZA', {minimumFractionDigits: 0}) %></span>
+              <span class="stat-tile__label">Total Spent</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="charts-row">
+          <div class="chart-card">
+            <h3 class="chart-title">Booking Activity <span>(Last 6 Months)</span></h3>
+            <div class="chart-wrap">
+              <canvas id="monthlyChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <h3 class="chart-title">Events by Category</h3>
+            <div class="chart-wrap chart-wrap--doughnut">
+              <canvas id="categoryChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Next Up -->
+        <% if (upcomingBookings && upcomingBookings.length > 0) { %>
+          <div class="next-up">
+            <h3 class="section-heading">
+              <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd"/></svg>
+              Next Up
+            </h3>
+            <div class="next-up-card">
+              <div class="next-up-badge">UPCOMING</div>
+              <h4><%= upcomingBookings[0].eventSnapshot?.title || upcomingBookings[0].event?.title || 'Event' %></h4>
+              <div class="next-up-meta">
+                <span>
+                  <svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 1.75a.75.75 0 011.5 0V3h5V1.75a.75.75 0 011.5 0V3A2.75 2.75 0 0114.75 5.75v6.5A2.75 2.75 0 0112 15H4A2.75 2.75 0 011.25 12.25v-6.5A2.75 2.75 0 014 3V1.75z" clip-rule="evenodd"/></svg>
+                  <%= upcomingBookings[0].eventSnapshot?.date ? new Date(upcomingBookings[0].eventSnapshot.date).toLocaleDateString('en-ZA', {day:'numeric',month:'long',year:'numeric'}) : 'Date TBA' %>
+                </span>
+                <span>
+                  <svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M3.75 1.5a.25.25 0 00-.25.25v12.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25V6.034a.25.25 0 00-.073-.177L9.823 2.823a.25.25 0 00-.177-.073H3.75z" clip-rule="evenodd"/></svg>
+                  Code: <strong><%= upcomingBookings[0].confirmationCode %></strong>
+                </span>
+                <span>
+                  <svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0zM8 0a8 8 0 100 16A8 8 0 008 0zm.75 4.75a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0v-4.5z"/></svg>
+                  <%= upcomingBookings[0].ticketCount %> ticket<%= upcomingBookings[0].ticketCount > 1 ? 's' : '' %>
+                </span>
+              </div>
+              <div class="next-up-actions">
+                <% if (upcomingBookings[0].event?._id) { %>
+                  <a href="/events/<%= upcomingBookings[0].event._id %>" class="dash-btn dash-btn--outline">View Event</a>
+                <% } %>
+                <form action="/bookings/<%= upcomingBookings[0]._id %>/cancel" method="POST" class="inline-form" onsubmit="return confirm('Are you sure you want to cancel this booking?')">
+                  <button type="submit" class="dash-btn dash-btn--danger-outline">Cancel Booking</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        <% } else { %>
+          <div class="empty-state">
+            <div class="empty-state__icon">🎫</div>
+            <h3>No upcoming events</h3>
+            <p>Discover events and book your next experience.</p>
+            <a href="/#events" class="dash-btn dash-btn--primary">Explore Events</a>
+          </div>
+        <% } %>
+
+      </section>
+
+      <!-- ── Upcoming Tab ──────────────────────────────────────────────── -->
+      <section id="upcoming" class="tab-panel">
+        <div class="dash-topbar">
+          <div>
+            <h2 class="panel-title">Upcoming Events</h2>
+            <p class="dash-subtitle"><%= upcomingCount %> confirmed booking<%= upcomingCount !== 1 ? 's' : '' %> ahead of you.</p>
+          </div>
+        </div>
+
+        <% if (upcomingBookings && upcomingBookings.length > 0) { %>
+          <div class="bookings-grid">
+            <% upcomingBookings.forEach(booking => { %>
+              <%- include('partials/booking-card', { booking, showCancel: true }) %>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="empty-state">
+            <div class="empty-state__icon">🗓️</div>
+            <h3>Nothing on the horizon</h3>
+            <p>Book an event and it'll appear here.</p>
+            <a href="/#events" class="dash-btn dash-btn--primary">Browse Events</a>
+          </div>
+        <% } %>
+      </section>
+
+      <!-- ── Past Tab ──────────────────────────────────────────────────── -->
+      <section id="past" class="tab-panel">
+        <div class="dash-topbar">
+          <div>
+            <h2 class="panel-title">Past Events</h2>
+            <p class="dash-subtitle">Events you've attended.</p>
+          </div>
+        </div>
+
+        <% if (pastBookings && pastBookings.length > 0) { %>
+          <div class="bookings-grid">
+            <% pastBookings.forEach(booking => { %>
+              <%- include('partials/booking-card', { booking, showCancel: false }) %>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="empty-state">
+            <div class="empty-state__icon">📁</div>
+            <h3>No past events yet</h3>
+            <p>Your attended events will show up here.</p>
+          </div>
+        <% } %>
+      </section>
+
+      <!-- ── Cancelled Tab ─────────────────────────────────────────────── -->
+      <section id="cancelled" class="tab-panel">
+        <div class="dash-topbar">
+          <div>
+            <h2 class="panel-title">Cancelled Bookings</h2>
+            <p class="dash-subtitle"><%= cancelledCount %> cancellation<%= cancelledCount !== 1 ? 's' : '' %> on record.</p>
+          </div>
+        </div>
+
+        <% if (cancelledBookings && cancelledBookings.length > 0) { %>
+          <div class="bookings-grid">
+            <% cancelledBookings.forEach(booking => { %>
+              <%- include('partials/booking-card', { booking, showCancel: false }) %>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="empty-state">
+            <div class="empty-state__icon">✅</div>
+            <h3>No cancellations</h3>
+            <p>All your bookings are active.</p>
+          </div>
+        <% } %>
+      </section>
+
+    </main>
+  </div>
 
   <%- include('partials/footer') %>
+
+  <script>
+    // ── Tab Navigation ─────────────────────────────────────────────────────
+    const sidebarLinks = document.querySelectorAll('.sidebar-link[data-tab]');
+    const panels       = document.querySelectorAll('.tab-panel');
+
+    function activateTab(tabId) {
+      panels.forEach(p => p.classList.remove('active'));
+      sidebarLinks.forEach(l => l.classList.remove('active'));
+      const panel = document.getElementById(tabId);
+      if (panel) panel.classList.add('active');
+      sidebarLinks.forEach(l => { if (l.dataset.tab === tabId) l.classList.add('active'); });
+      history.replaceState(null, '', '#' + tabId);
+    }
+
+    sidebarLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        activateTab(link.dataset.tab);
+      });
+    });
+
+    // Load tab from hash on page load
+    const hash = location.hash.replace('#', '');
+    if (hash && document.getElementById(hash)) activateTab(hash);
+
+    // ── Charts ─────────────────────────────────────────────────────────────
+    const monthlyRaw  = <%- monthlyData %>;
+    const categoryRaw = <%- categoryData %>;
+
+    // Monthly Bar Chart
+    const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+    new Chart(monthlyCtx, {
+      type: 'bar',
+      data: {
+        labels: monthlyRaw.map(d => d.month),
+        datasets: [{
+          label: 'Bookings',
+          data: monthlyRaw.map(d => d.count),
+          backgroundColor: 'rgba(37, 99, 235, 0.15)',
+          borderColor: '#2563eb',
+          borderWidth: 2,
+          borderRadius: 6,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` ${ctx.parsed.y} booking${ctx.parsed.y !== 1 ? 's' : ''}`
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { stepSize: 1, color: '#64748b', font: { size: 12 } },
+            grid: { color: 'rgba(100,116,139,0.1)' }
+          },
+          x: {
+            ticks: { color: '#64748b', font: { size: 12 } },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
+    // Category Doughnut Chart
+    const catLabels = Object.keys(categoryRaw);
+    const catValues = Object.values(categoryRaw);
+    const palette   = ['#2563eb','#7c3aed','#059669','#d97706','#dc2626','#0891b2','#9333ea','#16a34a'];
+
+    const catCtx = document.getElementById('categoryChart').getContext('2d');
+
+    if (catLabels.length === 0) {
+      // Draw placeholder
+      catCtx.canvas.parentElement.innerHTML = '<p class="chart-empty">No category data yet.</p>';
+    } else {
+      new Chart(catCtx, {
+        type: 'doughnut',
+        data: {
+          labels: catLabels,
+          datasets: [{
+            data: catValues,
+            backgroundColor: palette.slice(0, catLabels.length),
+            borderWidth: 2,
+            borderColor: '#fff',
+            hoverOffset: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '62%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { padding: 16, color: '#374151', font: { size: 12 } }
+            }
+          }
+        }
+      });
+    }
+
+    // ── Auto-dismiss flash messages ────────────────────────────────────────
+    document.querySelectorAll('.flash').forEach(el => {
+      setTimeout(() => el.style.opacity = '0', 5000);
+      setTimeout(() => el.remove(), 5600);
+    });
+  </script>
 
 </body>
 </html>

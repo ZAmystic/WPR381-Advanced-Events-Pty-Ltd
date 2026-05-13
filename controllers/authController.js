@@ -53,6 +53,7 @@ exports.login = async (req, res) => {
     req.session.userId = user._id;
     req.session.userRole = user.role;
     req.session.userName = user.name;
+    req.session.userEmail = user.email;
 
     res.redirect("/dashboard");
   } catch (err) {

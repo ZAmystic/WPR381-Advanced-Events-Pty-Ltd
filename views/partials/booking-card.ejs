@@ -1,0 +1,96 @@
+<%
+  const snap       = booking.eventSnapshot || {};
+  const evt        = booking.event         || {};
+  const title      = snap.title  || evt.title  || 'Event';
+  const eventDate  = snap.date   || evt.date   || null;
+  const venue      = snap.venueName || (evt.venue && evt.venue.name) || null;
+  const imgUrl     = evt.imageUrl || null;
+  const category   = evt.category || null;
+
+  const statusClass = {
+    confirmed : 'status--confirmed',
+    pending   : 'status--pending',
+    cancelled : 'status--cancelled',
+    refunded  : 'status--refunded',
+  }[booking.status] || 'status--pending';
+
+  const statusLabel = {
+    confirmed : 'Confirmed',
+    pending   : 'Pending',
+    cancelled : 'Cancelled',
+    refunded  : 'Refunded',
+  }[booking.status] || booking.status;
+
+  const categoryColors = {
+    Conference  : '#2563eb',
+    Festival    : '#7c3aed',
+    Workshop    : '#059669',
+    Concert     : '#d97706',
+    Exhibition  : '#0891b2',
+    Networking  : '#9333ea',
+    Sports      : '#dc2626',
+    Other       : '#6b7280',
+  };
+  const catColor = category ? (categoryColors[category] || '#6b7280') : '#6b7280';
+%>
+<article class="bk-card">
+  <!-- Image or gradient banner -->
+  <div class="bk-card__banner" style="<%= imgUrl ? `background-image:url('${imgUrl}')` : `background:linear-gradient(135deg,${catColor}22,${catColor}44)` %>">
+    <% if (!imgUrl) { %>
+      <span class="bk-card__cat-icon"><%= category || '🎟️' %></span>
+    <% } %>
+    <span class="bk-card__status <%= statusClass %>"><%= statusLabel %></span>
+  </div>
+
+  <!-- Body -->
+  <div class="bk-card__body">
+    <div class="bk-card__header">
+      <h3 class="bk-card__title"><%= title %></h3>
+      <% if (category) { %>
+        <span class="bk-card__cat" style="background:<%= catColor %>18;color:<%= catColor %>"><%= category %></span>
+      <% } %>
+    </div>
+
+    <ul class="bk-card__meta">
+      <% if (eventDate) { %>
+        <li>
+          <svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 1.75a.75.75 0 011.5 0V3h5V1.75a.75.75 0 011.5 0V3A2.75 2.75 0 0114.75 5.75v6.5A2.75 2.75 0 0112 15H4A2.75 2.75 0 011.25 12.25v-6.5A2.75 2.75 0 014 3V1.75z" clip-rule="evenodd"/></svg>
+          <%= new Date(eventDate).toLocaleDateString('en-ZA', {weekday:'short',day:'numeric',month:'long',year:'numeric'}) %>
+        </li>
+      <% } %>
+      <% if (venue) { %>
+        <li>
+          <svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9zM2 6a6 6 0 1110.174 4.31c-.203.196-.37.37-.51.513l-.083.09c-.336.357-.649.688-.962.947-.656.551-1.36.94-2.12.94-.758 0-1.46-.389-2.118-.94-.31-.26-.623-.59-.96-.946l-.082-.09C2.73 9.858 2 8.48 2 6z" clip-rule="evenodd"/><path d="M8 5.5a.5.5 0 01.5.5v1.5h1a.5.5 0 010 1H8a.5.5 0 01-.5-.5V6a.5.5 0 01.5-.5z"/></svg>
+          <%= venue %>
+        </li>
+      <% } %>
+      <li>
+        <svg viewBox="0 0 16 16"><path d="M2 3a1 1 0 011-1h10a1 1 0 011 1v1H2V3zm0 3h12v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6z"/></svg>
+        <%= booking.ticketCount %> ticket<%= booking.ticketCount > 1 ? 's' : '' %>
+        &nbsp;·&nbsp;
+        R<%= (booking.totalPrice || 0).toLocaleString('en-ZA') %>
+      </li>
+      <li class="bk-card__code">
+        <svg viewBox="0 0 16 16"><path d="M5 1a2 2 0 00-2 2v1h10V3a2 2 0 00-2-2H5zM1 6a2 2 0 012-2h10a2 2 0 012 2v6a2 2 0 01-2 2H3a2 2 0 01-2-2V6zm5 3a2 2 0 114 0 2 2 0 01-4 0z"/></svg>
+        Ref: <strong><%= booking.confirmationCode || 'N/A' %></strong>
+      </li>
+    </ul>
+
+    <% if (booking.cancelReason) { %>
+      <p class="bk-card__reason"><em>Reason: <%= booking.cancelReason %></em></p>
+    <% } %>
+
+    <!-- Actions -->
+    <div class="bk-card__actions">
+      <% if (evt._id) { %>
+        <a href="/events/<%= evt._id %>" class="dash-btn dash-btn--sm dash-btn--outline">View Event</a>
+      <% } %>
+      <% if (showCancel && booking.isActive) { %>
+        <form action="/bookings/<%= booking._id %>/cancel" method="POST" class="inline-form"
+              onsubmit="return confirm('Cancel this booking? This cannot be undone.')">
+          <button type="submit" class="dash-btn dash-btn--sm dash-btn--danger-outline">Cancel</button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+</article>
