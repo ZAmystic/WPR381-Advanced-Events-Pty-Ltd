@@ -228,16 +228,16 @@ After every review save or delete, the `recalcEventRating()` static runs an aggr
 
 | Name | Role |
 |------|------|
-|      | Team Lead / Project Coordinator
-|      | Backend Developer
-|      | Frontend Developer
-|      | Database Engineer
-|      | Security / DevOps Engineer
-|      | QA & Testing Engineer
+| Theart Gerhardus Jooste | Team Lead / Project Coordinator
+| Lindokuhle Shangase | Backend Developer
+| Elcke Van Der Berg & Steven Riaan Piek | Frontend Developer 
+| Nhlavutelo Shiviri | Database Engineer
+| Theart Gerhardus Jooste | Security / DevOps Engineer
+| Dylan James Spurrier | QA & Testing Engineer
 
 -----
 
-## Screenshots
+
 
 
 
