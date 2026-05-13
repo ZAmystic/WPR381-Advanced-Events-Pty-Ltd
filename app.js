@@ -70,6 +70,7 @@ app.get("/admin/events/create",       requireAdmin, eventCtrl.showCreateForm);
 app.post("/admin/events/create",      requireAdmin, eventCtrl.createEvent);
 app.get("/admin/events/:id/edit",     requireAdmin, eventCtrl.showEditForm);
 app.post("/admin/events/:id/edit",    requireAdmin, eventCtrl.updateEvent);
+app.get("/admin/events/:id/delete",   requireAdmin, eventCtrl.deleteEvent);
 app.post("/admin/events/:id/delete",  requireAdmin, eventCtrl.deleteEvent);
 
 // ─── Feature route modules ────────────────────────────────────────────────────

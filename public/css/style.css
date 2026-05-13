@@ -337,10 +337,11 @@ body {
 
 .form-group input,
 .auth-card input,
-.auth-card textarea {
+.auth-card textarea, .select {
     width: 100%;
     padding: 14px 16px;
     border: 1.5px solid #cbd5e1;
+    color: #111827;
     border-radius: 8px;
     font-size: 1rem;
     transition: all 0.3s;
@@ -428,7 +429,7 @@ body {
 .dashboard {
     padding: 50px;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 40px auto;
 }
 
 .dashboard-header {
@@ -465,6 +466,63 @@ body {
 
 .booking-card {
     margin-bottom: 20px;
+    padding: 28px;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    display: flex;
+    flex-direction: column;
+    min-height: 240px;
+    background: #ffffff;
+}
+
+.booking-card-body {
+    display: grid;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.booking-card-photo {
+    width: 100%;
+    min-height: 180px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    margin-top: 10px;
+}
+
+.booking-card-photo img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+
+.photo-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    color: #64748b;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 16px;
+    text-align: center;
+    background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+}
+
+.booking-card-row {
+    display: grid;
+    gap: 10px;
+}
+
+.booking-card-row p {
+    margin: 0;
+    color: #475569;
+}
+
+.bookings-section h2 {
+    margin-bottom: 24px;
 }
 
 /* ================================
@@ -483,6 +541,92 @@ body {
     border-radius: 6px;
     cursor: pointer;
     font-family: inherit;
+}
+
+.booking-card-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.booking-card-header h3 {
+    margin: 0 0 10px;
+}
+
+.booking-card-header .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: #4b5563;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.event-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.secondary-btn,
+.danger-btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.secondary-btn {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.danger-btn {
+    background: #ef4444;
+    color: white;
+}
+
+.inline-form {
+    display: inline;
+}
+
+.event-description {
+    margin-top: 12px;
+    color: #334155;
+    line-height: 1.8;
+    font-size: 0.98rem;
+}
+
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.tag-chip {
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(37, 99, 235, 0.15);
+    color: #4d6a8d;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    border: 1px solid rgba(37, 99, 235, 0.25);
+    backdrop-filter: blur(8px);
+}
+
+.tag-chip.empty {
+    background: rgba(148, 163, 184, 0.16);
+    color: #cbd5e1;
+    border-color: rgba(148, 163, 184, 0.2);
 }
 
 .card-actions {

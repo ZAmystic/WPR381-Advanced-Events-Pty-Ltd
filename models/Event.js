@@ -242,4 +242,5 @@ eventSchema.methods.hasAvailability = function () {
   );
 };
 
+
 module.exports = mongoose.model("Event", eventSchema);

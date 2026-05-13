@@ -12,29 +12,63 @@
 
   <section class="auth-section">
     <div class="auth-card" style="max-width: 700px;">
-      <h1>Create New Event</h1>
+      <% const values = event || {}; %>
+      <% const isEdit = Boolean(values._id); %>
+      <% const tagValue = Array.isArray(values.tags) ? values.tags.join(", ") : values.tags || ""; %>
+      <% const today = new Date().toISOString().split("T")[0]; %>
 
-      <form action="/admin/events/create" method="POST">
-        <input type="text" name="title" placeholder="Event Title" required>
+      <h1><%= isEdit ? "Edit Event" : "Create New Event" %></h1>
+
+      <% if (typeof error !== "undefined" && error) { %>
+        <div class="form-error"><%= error %></div>
+      <% } %>
+
+      <form action="<%= isEdit ? `/admin/events/${values._id}/edit` : '/admin/events/create' %>" method="POST">
+        <input type="text" name="title" placeholder="Event Title" required value="<%= values.title || "" %>">
 
         <textarea
           name="description"
           placeholder="Event Description"
           rows="5"
           required
-        ></textarea>
+        ><%= values.description || "" %></textarea>
 
-        <input type="date" name="date" required>
+        <input type="date" name="date" required min="<%= today %>" value="<%= values.date ? values.date.toString().slice(0, 10) : "" %>">
 
-        <input type="text" name="venue" placeholder="Venue" required>
+        <input type="text" name="venueName" placeholder="Venue Name" required value="<%= values.venue?.name || "" %>">
 
-        <input type="number" name="price" placeholder="Price" required>
+        <input type="text" name="venueAddress" placeholder="Venue Address" value="<%= values.venue?.address || "" %>">
 
-        <input type="number" name="capacity" placeholder="Capacity" required>
+        <input type="text" name="venueCity" placeholder="Venue City" value="<%= values.venue?.city || "" %>">
 
-        <input type="text" name="category" placeholder="Category" required>
+        <input type="number" name="price" placeholder="Price" required value="<%= values.price || "" %>">
 
-        <button type="submit">Save Event</button>
+        <input type="number" name="capacity" placeholder="Capacity" required value="<%= values.capacity || "" %>">
+
+        <select class="select" name="category" required>
+          <option value="" disabled <%= !values.category ? "selected" : "" %>>Select a category</option>
+          <option value="Conference" <%= values.category === "Conference" ? "selected" : "" %>>Conference</option>
+          <option value="Festival" <%= values.category === "Festival" ? "selected" : "" %>>Festival</option>
+          <option value="Workshop" <%= values.category === "Workshop" ? "selected" : "" %>>Workshop</option>
+          <option value="Concert" <%= values.category === "Concert" ? "selected" : "" %>>Concert</option>
+          <option value="Exhibition" <%= values.category === "Exhibition" ? "selected" : "" %>>Exhibition</option>
+          <option value="Networking" <%= values.category === "Networking" ? "selected" : "" %>>Networking</option>
+          <option value="Sports" <%= values.category === "Sports" ? "selected" : "" %>>Sports</option>
+          <option value="Other" <%= values.category === "Other" ? "selected" : "" %>>Other</option>
+        </select>
+
+        <% if (isEdit) { %>
+          <select class="select" name="status" required>
+            <option value="published" <%= values.status === "published" ? "selected" : "" %>>Published</option>
+            <option value="draft" <%= values.status === "draft" ? "selected" : "" %>>Draft</option>
+            <option value="cancelled" <%= values.status === "cancelled" ? "selected" : "" %>>Cancelled</option>
+            <option value="completed" <%= values.status === "completed" ? "selected" : "" %>>Completed</option>
+          </select>
+        <% } %>
+
+        <input type="text" name="tags" placeholder="Tags (comma separated)" value="<%= tagValue %>">
+
+        <button class="auth-btn" type="submit">Save Event</button>
       </form>
     </div>
   </section>
