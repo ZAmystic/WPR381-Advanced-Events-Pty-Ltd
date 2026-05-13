@@ -61,6 +61,16 @@ app.get("/register", (req, res) => res.render("register", { error: null }));
 app.get("/contact",  (req, res) => res.render("contact",  { error: null, success: null }));
 app.get("/events/:id", eventCtrl.getEventDetails);
 
+app.get("/terms", (req, res) => {
+  res.render("terms");
+});
+
+app.get("/privacy", (req, res) => {
+  res.render("privacy");
+});
+
+app.get("/events/:id", eventCtrl.getEventDetails);
+
 // ─── Auth protected ───────────────────────────────────────────────────────────
 app.get("/dashboard", requireAuth, bookingCtrl.getUserDashboard);
 
