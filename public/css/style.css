@@ -603,7 +603,51 @@ footer.site-footer .footer-bottom {
     font-size: 0.95rem;
 }
 
-@media (max-width: 880px) {
+/* Sponsors Section */
+.sponsors {
+    margin-top: 40px;
+    text-align: center;
+    align-items: center;
+}
+
+.sponsors h4 {
+    color: #ffffff;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.sponsors-slider {
+    overflow: hidden;
+    width: 55%;
+    margin: 0 auto;
+}
+
+.sponsors-track {
+    display: flex;
+    animation: scroll 20s linear infinite;
+}
+
+.sponsors-track img {
+    height: 60px;
+    margin: 0 20px;
+    transition: filter 0.3s ease;
+    display: flex;
+}
+
+.sponsors-track img:hover {
+    filter: grayscale(0%) brightness(1);
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 600px) {
     footer.site-footer .footer-content {
         grid-template-columns: 1fr;
     }
