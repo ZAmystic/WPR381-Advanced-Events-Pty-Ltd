@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
  */
 const connectDB = async () => {
   const MONGO_URI =
-    process.env.MONGO_URI || "mongodb://localhost:27017/advanced_events";
+    process.env.MONGO_URI || "mongodb://vanderbergelcke101_db_user:ElckeEvents@ac-3p7abyr-shard-00-00.eqzwvek.mongodb.net:27017,ac-3p7abyr-shard-00-01.eqzwvek.mongodb.net:27017,ac-3p7abyr-shard-00-02.eqzwvek.mongodb.net:27017/WPR381-Advanced-Events-Pty-Ltd?ssl=true&replicaSet=atlas-h09dg6-shard-0&authSource=admin&appName=Cluster0";
 
   const options = {
     serverSelectionTimeoutMS: 5000,
