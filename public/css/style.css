@@ -247,6 +247,11 @@ body {
    EVENT DETAILS - event-details.ejs
 ================================ */
 
+.event-card img{
+    height: 200px;
+    object-fit: cover;
+}
+
 .event-details {
     max-width: 1100px;
     margin: 50px auto;

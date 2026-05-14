@@ -21,6 +21,28 @@
         <button>Explore Events</button>
       </a>
     </section>
+
+        <!-- SEARCH & FILTER -->
+<section class="search-section">
+    <form class="search-form">
+        <input
+            type="text"
+            placeholder="Search events..."
+        >
+
+        <select>
+            <option>All Categories</option>
+            <option>Conference</option>
+            <option>Festival</option>
+            <option>Workshop</option>
+        </select>
+
+        <input type="date">
+
+        <button type="submit">Search</button>
+    </form>
+</section>
+
   
     <section id="events" class="events">
       <div class="event-card">
@@ -35,10 +57,11 @@
 
         <div class="event-card">
 
-            <img
-                src="<%= event.image %>"
-                alt="<%= event.title %>"
-            >
+            <% if (event.imageUrl) { %>
+                <img src="<%= event.imageUrl %>" alt="Photo for <%= event.title %>">
+              <% } else { %>
+                <div class="photo-placeholder">No event photo available</div>
+              <% } %>
 
             <h3><%= event.title %></h3>
 

@@ -14,10 +14,11 @@
 
     <div class="event-details-image">
 
-        <img
-            src="<%= event.image %>"
-            alt="<%= event.title %>"
-        >
+        <% if (event.imageUrl) { %>
+                <img src="<%= event.imageUrl %>" alt="Photo for <%= event.title %>">
+              <% } else { %>
+                <div class="photo-placeholder">No event photo available</div>
+              <% } %>
 
     </div>
 
